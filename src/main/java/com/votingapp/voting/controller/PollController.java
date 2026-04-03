@@ -10,7 +10,7 @@ import com.votingapp.voting.model.*;
 import com.votingapp.voting.request.*;
 import com.votingapp.voting.service.PollService;
 
-@CrossOrigin(origins = "http://localhost:4200")  // ✅ CORS FIX
+@CrossOrigin(origins = "https://hilarious-kangaroo-9c0876.netlify.app")  // ✅ CORS FIX
 @RestController
 @RequestMapping("/api/polls")
 public class PollController {
