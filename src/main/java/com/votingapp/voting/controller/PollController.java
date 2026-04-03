@@ -1,16 +1,15 @@
 package com.votingapp.voting.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.votingapp.voting.model.*;
-import com.votingapp.voting.request.*;
+import com.votingapp.voting.model.Poll;
+import com.votingapp.voting.request.Vote;
 import com.votingapp.voting.service.PollService;
 
-@CrossOrigin(origins = "https://https://effulgent-sundae-0cad1b.netlify.app/")  // ✅ CORS FIX
+@CrossOrigin(origins = "*")  // ✅ Allow all origins (for testing)
 @RestController
 @RequestMapping("/api/polls")
 public class PollController {
@@ -21,31 +20,31 @@ public class PollController {
         this.pollService = pollService;
     }
 
-    // ✅ Create Poll
+    // ✅ Create a new poll
     @PostMapping
     public Poll createPoll(@RequestBody Poll poll) {
         return pollService.createPoll(poll);
     }
 
-    // ✅ Get All Polls
+    // ✅ Get all polls
     @GetMapping
-    public List<Poll> getAllPolles() {
+    public List<Poll> getAllPolls() {
         return pollService.getAllPolls();
     }
 
-    // ✅ Get Poll By ID
-    @GetMapping("/{id}")   // 🔥 FIXED HERE
+    // ✅ Get a single poll by ID
+    @GetMapping("/{id}")
     public ResponseEntity<Poll> getPollById(@PathVariable Long id) {
         return pollService.getPollById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ✅ Vote
-    @PostMapping("/vote")
-    public ResponseEntity<Poll> vote(@RequestBody Vote vote)
-    {
-        Poll updatedPoll = pollService.vote(vote.getPollId(), vote.getOptionIndex());
+    // ✅ Vote on a poll option
+    // Endpoint: POST /api/polls/{id}/vote
+    @PostMapping("/{id}/vote")
+    public ResponseEntity<Poll> vote(@PathVariable Long id, @RequestBody Vote vote) {
+        Poll updatedPoll = pollService.vote(id, vote.getOptionIndex());
         return ResponseEntity.ok(updatedPoll);
     }
 }
